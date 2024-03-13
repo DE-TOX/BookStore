@@ -6,6 +6,8 @@ import FilledInput from '@mui/material/FilledInput';
 import InputAdornment from '@mui/material/InputAdornment';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import { loginUser } from '../../services/UserServices';
+
 
 
 export default function Login() {
@@ -59,7 +61,8 @@ export default function Login() {
 
     // Validation function for Password
     const validatePassword = (value) => {
-        if (value.length < 8) {
+        const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/;
+        if (!passwordRegex.test(value)) {
             setPasswordError(true);
         } else {
             setPasswordError(false);
@@ -75,6 +78,19 @@ export default function Login() {
         const value = event.target.value;
         setPassword(value);
         validatePassword(value);
+    };
+
+    const handleLogin =async() => {
+        validateEmail(email)
+        validatePassword(password)
+        const userData = {
+            email: email,
+            password: password,
+        };
+        
+        const response =  await loginUser(userData)
+        
+        console.log(response);
     };
 
     return (
@@ -105,12 +121,12 @@ export default function Login() {
 
                         }
                     />
-                    {passwordError && <FormHelperText error>Password must be at least 8 characters long.</FormHelperText>}
+                    {passwordError && <FormHelperText error>must have atleast 1 upperCase LowerCase alpha,number & special charcter.</FormHelperText>}
                     <FormHelperText sx={{ paddingLeft: "170px" }}>
                         <p style={{ color: 'inherit', textDecoration: 'none' }}>Forgot Password?</p>
                     </FormHelperText>
                 </FormControl>
-                <Button variant="contained" color='ochre'>Login</Button>
+                <Button  onClick={handleLogin}  variant="contained" color='ochre'>Login</Button>
                 <Typography variant="body2" color="initial" boxSizing={'border-box'} mx={"auto"}>OR</Typography>
                 <Box display={"flex"} gap={1}>
                     <Button variant="contained" color='blue' sx={{ width: "50%" }}>FaceBook</Button><Button color='white' sx={{ width: "50%", color: "black" }}>Google</Button>

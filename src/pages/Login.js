@@ -24,10 +24,10 @@ function Login() {
                     alignItems="center"
                     justifyContent="center"
                     p={4}
-                    boxShadow={4}
+                    boxShadow={12}
                     maxHeight={235}
                 >
-                    <img style={{ height: 230, width: 230, borderRadius: "50%" }} src={loginImage} alt="Login" />
+                    <img style={{ height: 200, width: 200, borderRadius: "50%" }} src={loginImage} alt="Login" />
                     <Typography variant="subtitle1" color="initial">ONLINE BOOK SHOPING</Typography>
                 </Box>
                 <Box
@@ -36,9 +36,10 @@ function Login() {
                         width={370}
                         minHeight={425}
                         borderRadius={1}
-                        boxShadow={4}
+                        boxShadow={"12"}
                         sx={{ backgroundColor: "#ffffff", zIndex: '1', position: 'relative', bottom: "100px" }}
                         p={4}
+
                     >
                         <LoginTab></LoginTab>
                     </Box>
