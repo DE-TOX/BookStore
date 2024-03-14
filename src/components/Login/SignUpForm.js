@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { FormControl, InputLabel, Input, FormHelperText, Box, Button } from '@mui/material';
+import { FormControl, InputLabel, Input, FormHelperText, Box, Button, Snackbar } from '@mui/material';
 import IconButton from '@mui/material/IconButton'
 import FilledInput from '@mui/material/FilledInput';
 import InputAdornment from '@mui/material/InputAdornment';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { signupUser } from '../../services/UserServices';
+import Alert from '@mui/material/Alert';
+
 
 
 export default function SignUp() {
@@ -25,6 +27,15 @@ export default function SignUp() {
     // State for Mobile Number
     const [mobileNumber, setMobileNumber] = useState('');
     const [mobileNumberError, setMobileNumberError] = useState(false);
+    const [open, setOpen] = useState(false);
+
+    // Function to handle the Snackbar close
+    const handleClose = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+        setOpen(false);
+    };
 
 
     const theme = createTheme({
@@ -52,7 +63,7 @@ export default function SignUp() {
 
     // Validation function for Full Name
     const validateFullName = (value) => {
-        if (value.length < 3 || !/^[a-zA-Z]+$/.test(value)) {
+        if (value.length < 3 || !/^[a-zA-Z ]+$/.test(value)) {
             setFullNameError(true);
         } else {
             setFullNameError(false);
@@ -116,7 +127,7 @@ export default function SignUp() {
 
 
 
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
         validateFullName(fullName);
         validateEmail(email);
@@ -130,11 +141,16 @@ export default function SignUp() {
             fullName: fullName,
             email: email,
             password: password,
-            mobileNumber: mobileNumber
+            phone: mobileNumber
         };
 
         console.log(userData);
-        signupUser(userData)
+        const response = await signupUser(userData)
+        console.log(response);
+        if (response && response.message.includes("successfull,")) { // Assuming the response has a 'success' property
+            setOpen(true); // Open the Snackbar
+            
+        }
         // Here you can handle the form submission, e.g., send the data to a server
     };
     return (
@@ -182,6 +198,11 @@ export default function SignUp() {
                     <Button type='submit' variant="contained" color='ochre'>SignUp</Button>
                 </ThemeProvider>
             </Box>
+            <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+                <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
+                    { }
+                </Alert>
+            </Snackbar>
         </form>
     )
 }

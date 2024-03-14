@@ -4,7 +4,7 @@ const baseUrl = "https://bookstore.incubation.bridgelabz.com/bookstore_user"
 export const signupUser = async (userDetails) => {
     try {
         const response = await axios.post(`${baseUrl}/registration`, userDetails);
-        console.log(response.data);
+        return (response.data);
     } catch (error) {
         console.error(error);
     }
@@ -12,7 +12,8 @@ export const signupUser = async (userDetails) => {
 export const loginUser = async (userDetails) => {
     try {
         const response = await axios.post(`${baseUrl}/login`, userDetails);
-        console.log(response.data);
+        const data = response.data.result;
+        window.localStorage.setItem("token", data.accessToken);
     } catch (error) {
         console.error(error);
     }

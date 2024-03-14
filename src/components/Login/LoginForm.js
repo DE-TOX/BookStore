@@ -7,6 +7,7 @@ import InputAdornment from '@mui/material/InputAdornment';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { loginUser } from '../../services/UserServices';
+import { useNavigate } from 'react-router-dom';
 
 
 
@@ -16,6 +17,7 @@ export default function Login() {
     // State for Email Address
     const [email, setEmail] = useState('');
     const [emailError, setEmailError] = useState(false);
+    const navigate = useNavigate()
 
     // State for Password
     const [password, setPassword] = useState('');
@@ -40,7 +42,8 @@ export default function Login() {
                 contrastText: '#ffffff',
             },
             white: {
-                main: '#ffffff'
+                main: '#ffffff',
+                dark: '#d1d1d1',
             },
         },
     });
@@ -80,17 +83,18 @@ export default function Login() {
         validatePassword(value);
     };
 
-    const handleLogin =async() => {
+    const handleLogin = async () => {
         validateEmail(email)
         validatePassword(password)
         const userData = {
             email: email,
             password: password,
         };
-        
-        const response =  await loginUser(userData)
-        
-        console.log(response);
+
+        const response = await loginUser(userData)
+        if (response ) { // Assuming the response has a 'success' property
+            navigate('/dashboard/product'); // Navigate to /dashboard/product on successful login
+        }
     };
 
     return (
@@ -126,7 +130,7 @@ export default function Login() {
                         <p style={{ color: 'inherit', textDecoration: 'none' }}>Forgot Password?</p>
                     </FormHelperText>
                 </FormControl>
-                <Button  onClick={handleLogin}  variant="contained" color='ochre'>Login</Button>
+                <Button onClick={handleLogin} variant="contained" color='ochre'>Login</Button>
                 <Typography variant="body2" color="initial" boxSizing={'border-box'} mx={"auto"}>OR</Typography>
                 <Box display={"flex"} gap={1}>
                     <Button variant="contained" color='blue' sx={{ width: "50%" }}>FaceBook</Button><Button color='white' sx={{ width: "50%", color: "black" }}>Google</Button>
