@@ -6,10 +6,29 @@ import Typography from '@mui/material/Typography';
 import { Box, CardActionArea } from '@mui/material';
 import BookImg from "../../images/Image 20.png"
 import StarIcon from '@mui/icons-material/Star';
+import { useNavigate } from 'react-router-dom';
 
 export default function BookCard(props) {
+    const [isHovered, setIsHovered] = React.useState(false);
+    const navigate = useNavigate()
+    const handleCardClick = (product) => {
+        navigate('/dashboard/details', { state: { product } });
+    };
     return (
-        <Card sx={{ minWidth: 235, maxHeight: 275 }}>
+        <Card
+            sx={{
+                minWidth: 235, maxHeight: 275, transition: '0.3s',
+                elevation: isHovered ? 3 : 4,
+                position: 'relative',
+                '&:hover': {
+                    boxShadow: '0 8px 40px -12px rgba(0,0,0,0.5)',
+                }
+            }}
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
+            onClick={() => handleCardClick(props)}
+
+        >
             <CardActionArea>
                 <div style={{ display: 'flex', justifyContent: 'center', width: "100%", backgroundColor: "#dedede" }}
                 >
@@ -35,6 +54,9 @@ export default function BookCard(props) {
                     </Typography>
                 </CardContent>
             </CardActionArea>
+            {isHovered && (
+                <span style={{ cursor: "pointer", color: "white", position: 'absolute', top: '63%', left: '50%', transform: 'translate(-50%, -50%)', backgroundColor: 'rgba(0, 0, 0, 0.8)', padding: '2px' }}>Quick View</span>
+            )}
         </Card>
     );
 }

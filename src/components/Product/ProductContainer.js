@@ -5,6 +5,8 @@ import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography'
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import { getProducts } from '../../services/ProductServices';
+import { Outlet } from 'react-router-dom';
+
 
 export default function ProductContainer() {
 
@@ -18,13 +20,14 @@ export default function ProductContainer() {
             console.error('Error fetching notes:', error);
         }
     };
+    
     useEffect(() => {
         fetchProducts();
         return () => {
             console.log('Component Unmounted');
         };
     }, []);
-    return (
+    return (<>
         <Box sx={{ flexGrow: 1, display: 'flex', flexDirection: "column", justifyContent: 'center', alignItems: 'center' }}>
             <Box sx={{ width: "91%", display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: "25px " }} >
                 <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
@@ -33,16 +36,18 @@ export default function ProductContainer() {
                 </Box>
                 <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }} >Sort by relevance <KeyboardArrowDownIcon /></Box>
             </Box>
-            <Box sx={{ flexGrow: 1, display: 'flex', justifyContent: 'center', alignItems: 'center' }} >
-                <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }}>
+            <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }} >
+                <Grid container spacing={{ xs: 3, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }}>
                     {Array.from(products).map((ele, index) => (
-                        <Grid item xs={2} sm={4} md={3} key={index} sx={{ display: "flex", justifyContent: "center" }}>
+                        <Grid item xs={12} sm={4} md={3} key={index} sx={{ display: "flex", justifyContent: "center" }}>
                             <BookCard product={ele} />
                         </Grid>
                     ))}
                 </Grid>
             </Box>
         </Box>
+        <Outlet />
+    </>
 
     )
 };

@@ -144,14 +144,10 @@ export default function SignUp() {
             phone: mobileNumber
         };
 
-        console.log(userData);
         const response = await signupUser(userData)
-        console.log(response);
         if (response && response.message.includes("successfull,")) { // Assuming the response has a 'success' property
             setOpen(true); // Open the Snackbar
-            
         }
-        // Here you can handle the form submission, e.g., send the data to a server
     };
     return (
         <form onSubmit={handleSubmit}>
@@ -178,7 +174,6 @@ export default function SignUp() {
                                     <IconButton
                                         aria-label="toggle password visibility"
                                         onClick={handleClickShowPassword}
-                                        onMouseDown={handleMouseDownPassword}
                                         edge="end"
                                     >
                                         {showPassword ? <VisibilityOff /> : <Visibility />}

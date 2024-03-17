@@ -1,7 +1,8 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Login from "../pages/Login";
-import Dashboard  from "../components/Dashboard/Dashboard";
+import Dashboard from "../components/Dashboard/Dashboard";
 import ProductContainer from "../components/Product/ProductContainer";
+import ProductDetails from "../components/Product/ProductDetail";
 
 export const Routers = () => {
     const AppRoutes = createBrowserRouter([
@@ -14,9 +15,14 @@ export const Routers = () => {
             element: <Dashboard />,
 
             children: [
-                { path: "product", element: <ProductContainer />  }
-            //     { path: "archive", element: <ProtectedRoute><ArciveContainer /> </ProtectedRoute> },
-            //     { path: "trash", element: <ProtectedRoute><TrashContainer /></ProtectedRoute> }
+                {
+                    path: "product",
+                    element: <ProductContainer />
+                },
+                {
+                            path: "details",
+                            element: <ProductDetails />
+                }
             ],
         }
     ])
