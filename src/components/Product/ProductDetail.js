@@ -1,5 +1,5 @@
 import { Box, Divider, Typography, Button, Avatar } from '@mui/material'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import BasicBreadcrumbs from './BreadCrums'
 import BookImg from '../../images/Image 20@2x.png'
 import BookImg2 from '../../images/Image 20.png'
@@ -8,28 +8,61 @@ import StarIcon from '@mui/icons-material/Star';
 import Rating from '@mui/material/Rating';
 import { FavoriteBorder } from '@mui/icons-material'
 import { useLocation } from 'react-router-dom'
+import { addCart, getCartItems, updateQuantity } from '../../services/ProductServices'
+
 
 export default function ProductDetails() {
     const location = useLocation();
     const product = location.state && location.state.product ? location.state.product : null;
     const [showIncrementDecrement, setShowIncrementDecrement] = useState(false);
     const [quantity, setQuantity] = useState(1);
+    useEffect(() => {
+        const fetchCartItem = async () => {
+            const cartItem = await getCartItem();
+            if (cartItem[0] && cartItem[0]._id) {
+                setShowIncrementDecrement(true);
+                setQuantity(cartItem[0].quantityToBuy);
+            }
+        };
+    
+        fetchCartItem();
+    });
 
-    const handleAddToBag = () => {
+    const handleAddToBag = async () => {
         setShowIncrementDecrement(true);
+        const id = { product }
+        const idParam = (id.product.product._id);
+        await addCart(idParam, product)
+        const cartItem = await getCartItem()
+        console.log(cartItem);
     };
-
-    const handleIncrement = () => {
+    const getCartItem = async () => {
+        const cartList = await getCartItems();
+        const filteredItems = cartList.data.result.filter(item => item.product_id._id === product.product._id);
+        return filteredItems
+    }
+    const handleIncrement = async () => {
+        const cartItem = await getCartItem()
         setQuantity(prevQuantity => prevQuantity + 1);
+        var prodCount =
+        {
+            "quantityToBuy": quantity + 1
+        }
+        await updateQuantity(cartItem[0]._id, prodCount)
     };
 
-    const handleDecrement = () => {
-        setQuantity(prevQuantity => prevQuantity > 0 ? prevQuantity - 1 : prevQuantity);
+    const handleDecrement = async () => {
+        const cartItem = await getCartItem()
+        setQuantity(prevQuantity => prevQuantity > 1 ? prevQuantity - 1 : prevQuantity);
+        var prodCount =
+        {
+            "quantityToBuy": quantity - 1
+        }
+    
+        await updateQuantity(cartItem[0]._id, prodCount)
     };
 
-    // If product is null, you might want to redirect the user or show a message
     if (!product) {
-        // Redirect or show a message
         console.error('No product data found.');
         return null; // Or redirect to another page
     }
