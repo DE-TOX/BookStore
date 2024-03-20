@@ -3,6 +3,7 @@ import Login from "../pages/Login";
 import Dashboard from "../components/Dashboard/Dashboard";
 import ProductContainer from "../components/Product/ProductContainer";
 import ProductDetails from "../components/Product/ProductDetail";
+import Cart from "../components/Cart/Cart";
 
 export const Routers = () => {
     const AppRoutes = createBrowserRouter([
@@ -20,8 +21,12 @@ export const Routers = () => {
                     element: <ProductContainer />
                 },
                 {
-                            path: "details",
-                            element: <ProductDetails />
+                    path: "details",
+                    element: <ProductDetails />
+                },
+                {
+                    path: "cart",
+                    element: <Cart />
                 }
             ],
         }

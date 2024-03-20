@@ -24,9 +24,9 @@ export const getProducts = async () => {
 
 };
 
-export const addCart = async (productId,product) => {
+export const addCart = async (productId, product) => {
     try {
-        const response = await axios.post(`${baseUrl}/add_cart_item/${productId}`,product , configForProducts())
+        const response = await axios.post(`${baseUrl}/add_cart_item/${productId}`, product, configForProducts())
         return (response)
     } catch (error) {
         console.error(error);
@@ -34,7 +34,7 @@ export const addCart = async (productId,product) => {
 };
 
 
-  
+
 export const updateQuantity = async (productId, quantity) => {
 
     console.log(quantity);
@@ -57,7 +57,7 @@ export const getCartItems = async () => {
 
 export const deleteCartItem = async (productId) => {
 
-    await axios.delete(`${baseUrl}/cart_item_quantity/${productId}`,  configForProducts()).then(result => {
+    await axios.delete(`${baseUrl}/remove_cart_item/${productId}`, configForProducts()).then(result => {
         return result
     }).catch(err => {
         return (err.message);

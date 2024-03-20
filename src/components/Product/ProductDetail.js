@@ -24,7 +24,7 @@ export default function ProductDetails() {
                 setQuantity(cartItem[0].quantityToBuy);
             }
         };
-    
+
         fetchCartItem();
     });
 
@@ -58,7 +58,7 @@ export default function ProductDetails() {
         {
             "quantityToBuy": quantity - 1
         }
-    
+
         await updateQuantity(cartItem[0]._id, prodCount)
     };
 
@@ -79,9 +79,9 @@ export default function ProductDetails() {
                         {/* <Button variant='contained' sx={{ backgroundColor: "#A03037" }}>ADD TO BAG</Button><Button variant='contained' sx={{ backgroundColor: "#333333" }} ><FavoriteBorder /> WISHLIST</Button> */}
                         {showIncrementDecrement ? (
                             <>
-                                <Button variant='contained' sx={{ background: "none", color: "black", fontSize: "20px" }} onClick={handleDecrement}>-</Button>
+                                <Button variant='contained' sx={{ background: "none", color: "black", fontSize: "20px", borderRadius: "50%", width: "40px", height: "40px" }} onClick={handleDecrement}>-</Button>
                                 <Typography mt={1.5}>{quantity}</Typography>
-                                <Button variant='contained' sx={{ background: "none", color: "black", fontSize: "20px" }} onClick={handleIncrement}>+</Button>
+                                <Button variant='contained' sx={{ background: "none", color: "black", fontSize: "20px", borderRadius: "50%",width: "40px", height: "40px" }} onClick={handleIncrement}>+</Button>
                             </>
                         ) : (
                             <Button variant='contained' sx={{ backgroundColor: "#A03037" }} onClick={handleAddToBag}>ADD TO BAG</Button>
@@ -158,6 +158,6 @@ export default function ProductDetails() {
                     </Box>
                 </Box>
             </Box>
-        </Box >
+        </Box>
     )
 };
