@@ -92,7 +92,7 @@ export default function Login() {
         };
 
         const response = await loginUser(userData)
-        if (response ) { // Assuming the response has a 'success' property
+        if (response) { // Assuming the response has a 'success' property
             navigate('/dashboard/product'); // Navigate to /dashboard/product on successful login
         }
     };
@@ -105,9 +105,10 @@ export default function Login() {
                     <Input id="email" value={email} onChange={handleEmailChange} />
                     {emailError && <FormHelperText error>Please enter a valid email address.</FormHelperText>}
                 </FormControl>
-                <FormControl>
+                <FormControl sx={{ backgroundColor: "#ffffff" }}>
                     <InputLabel htmlFor="filled-adornment-password">Password</InputLabel>
                     <FilledInput
+                        sx={{ backgroundColor: "#ffffff" }}
                         id="filled-adornment-password"
                         type={showPassword ? 'text' : 'password'}
                         value={password} onChange={handlePasswordChange}

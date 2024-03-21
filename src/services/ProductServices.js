@@ -15,13 +15,9 @@ export const getProducts = async () => {
     try {
         const response = await axios.get(`${baseUrl}/get/book`);
         return (response)
-        // window.localStorage.setItem(, value);
-        // Handle successful signup (e.g., redirect to login page)
     } catch (error) {
         console.error(error);
-        // Handle errors (e.g., show an error message)
     }
-
 };
 
 export const addCart = async (productId, product) => {
@@ -37,7 +33,6 @@ export const addCart = async (productId, product) => {
 
 export const updateQuantity = async (productId, quantity) => {
 
-    console.log(quantity);
     await axios.put(`${baseUrl}/cart_item_quantity/${productId}`, quantity, configForProducts()).then(result => {
         return result
     }).catch(err => {
@@ -56,10 +51,27 @@ export const getCartItems = async () => {
 
 
 export const deleteCartItem = async (productId) => {
-
     await axios.delete(`${baseUrl}/remove_cart_item/${productId}`, configForProducts()).then(result => {
         return result
     }).catch(err => {
         return (err.message);
     })
+};
+
+export const placeOrder = async (order) => {
+    try {
+        const response = await axios.post(`${baseUrl}/add/order`, order, configForProducts())
+        return (response)
+    } catch (error) {
+        console.error(error);
+    }
+};
+
+export const addressUpdate = async (obj) => {
+    try {
+        const response = await axios.put(`${baseUrl}/edit_user`, obj, configForProducts())
+        return (response)
+    } catch (error) {
+        console.error(error);
+    }
 };

@@ -5,8 +5,9 @@ import { Box, Button, Grid, Paper, Typography } from '@mui/material'
 import CartItem from './CartItem';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
-import { getCartItems } from '../../services/ProductServices';
+import { addressUpdate, getCartItems } from '../../services/ProductServices';
 import { FormControl, RadioGroup, FormControlLabel, Radio } from '@mui/material';
+import Order from './Order';
 
 
 const theme = createTheme({
@@ -35,19 +36,22 @@ export default function Cart() {
 
 
     const [cartItems, setCartItems] = useState([]);
-    const [value, setValue] = useState('');
+    const [value, setValue] = useState('other');
     const [address, setAddress] = useState(false);
-    const [userDetail, setUserDetail] = useState({});
     const [nameValid, setNameValid] = useState(false);
     const [phoneValid, setPhoneValid] = useState(false);
     const [addressValid, setAddressValid] = useState(false);
     const [cityValid, setCityValid] = useState(false);
     const [stateValid, setStateValid] = useState(false);
     const [typeValid, setTypeValid] = useState(true);
+    const [checkoutVisible, setCheckoutVisible] = useState(false);
+
+
+
 
     const handleInputChange = (event) => {
         const { name, value } = event.target;
-        console.log(`Input changed: ${name}, Value: ${value}`);
+        // console.log(`Input changed: ${name}, Value: ${value}`);
         switch (name) {
             case 'name':
                 setNameValid(value.trim() !== '');
@@ -75,29 +79,33 @@ export default function Cart() {
         }
     };
 
+    const removeItem = (itemId) => {
+        setCartItems(prevItems => prevItems.filter(item => item._id !== itemId));
+    };
+
     const handleChange = (event) => {
         setValue(event.target.value);
     };
-    const handleContinue = (event) => {
+    const handleContinue = async (event) => {
         event.preventDefault();
         const name = document.getElementById('name').value;
         const phone = document.getElementById('phone').value;
         const addressInput = document.getElementById('address').value;
         const city = document.getElementById('city').value;
         const state = document.getElementById('state').value;
-        const type = value;
+        const addressType = value;
 
-        const userDetail = {
-            name,
-            phone,
-            address: addressInput,
+        const user = {
+            fullAddress: addressInput,
             city,
             state,
-            type
+            addressType
         };
+        const response = await addressUpdate(user)
+        if (response) {
+            setCheckoutVisible(true);
+        }
 
-        setUserDetail(userDetail);
-        console.log(userDetail);
     };
 
     const fetchProducts = async () => {
@@ -111,7 +119,8 @@ export default function Cart() {
 
     useEffect(() => {
         fetchProducts();
-    }, [cartItems]);
+    }, []);
+
 
     const placeOrder = () => {
         setAddress(true)
@@ -123,7 +132,7 @@ export default function Cart() {
             <BasicBreadcrumb />
             <Box display={'flex'} flexDirection={'column'} sx={{ flexGrow: 1, width: { xs: '100%', sm: '80%', md: '60%', lg: '50%', xl: '70%' } }}>
                 <Box display={'flex'} alignItems={'center'} width={"100%"} justifyContent={"space-between"}>
-                    <Typography p={2} variant="h6" color="initial">My Cart (1)</Typography>
+                    <Typography p={2} variant="h6" color="initial">My Cart ({cartItems?.length})</Typography>
                     <Typography variant="body" color="initial" sx={{ display: "flex" }} border={"1px solid #DCDCDC"}>
                         <LocationOnIcon color='ochre' fontSize='small' />
                         Use Current Location
@@ -133,8 +142,9 @@ export default function Cart() {
                 {cartItems?.length > 0 ? (
                     <Paper sx={{ padding: "10px", flexGrow: 1, width: { xs: '100%', sm: '80%', md: '60%', lg: '70%', xl: '80%' }, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }} elevation={3} >
                         {Array.from(cartItems).map((ele, index) => (
-                            <Grid item columns={{ xs: 4, sm: 8, md: 12 }} xs={12} sm={4} md={12} key={index} sx={{ display: "flex", justifyContent: "center" }}>
-                                <CartItem product={ele} />
+                            <Grid item columns={{ xs: 4, sm: 8, md: 12 }} xs={12} sm={4} md={12} key={index} sx={{ display: "flex", justifyContent: "flex-start" }}>
+                                <CartItem product={ele} onRemove={removeItem} />
+
                             </Grid>
                         ))}
                         {!address ? (<Box sx={{ display: 'flex', justifyContent: 'flex-end', width: '100%' }}>
@@ -142,7 +152,8 @@ export default function Cart() {
                         </Box>) : (<Box></Box>)}
                     </Paper>
                 ) : (
-                    <Typography variant="h5" color="initial">Add Item in Cart</Typography>
+                    <Typography variant="h5" color="initial" p={5}>Add Item in Cart</Typography>
+                    
                 )}
                 <Paper sx={{ marginTop: "10px", padding: "10px", flexGrow: 1, width: { xs: '100%', sm: '80%', md: '60%', lg: '70%', xl: '80%' }, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }} elevation={3} >
 
@@ -180,8 +191,8 @@ export default function Cart() {
                                     <FormControl component="fieldset">
                                         <RadioGroup row aria-label="option" name="option" value={value} onChange={handleChange}>
                                             <FormControlLabel onChange={handleInputChange} value="home" control={<Radio />} label="Home" />
-                                            <FormControlLabel onChange={handleInputChange} value="work" control={<Radio />} label="Work" />
-                                            <FormControlLabel onChange={handleInputChange} value="other" control={<Radio />} label="Other" />
+                                            <FormControlLabel onChange={handleInputChange} value="Office" control={<Radio />} label="Office" />
+                                            <FormControlLabel onChange={handleInputChange} value="Other" control={<Radio />} label="Other" />
                                         </RadioGroup>
                                     </FormControl>
                                 </Box>
@@ -192,6 +203,15 @@ export default function Cart() {
                         </Box>
                     </>)}
                 </Paper>
+                {checkoutVisible && (
+                    <Paper sx={{ my: "20px", padding: "10px", flexGrow: 1, width: { xs: '100%', sm: '80%', md: '60%', lg: '70%', xl: '80%' }, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }} elevation={3} >
+                        <Box>
+                            <Typography variant="h6" color="initial" p={1}>Order Summary</Typography>
+                            <Order Item={cartItems} />
+                        </Box>
+                    </Paper>
+                )}
+
 
             </Box>
         </ThemeProvider>
