@@ -17,7 +17,8 @@ import MoreIcon from '@mui/icons-material/MoreVert';
 import AccountMenu from './AccountMenu';
 import { useNavigate } from 'react-router-dom';
 import { Badge, Button } from '@mui/material';
-// import { useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
+// import { getItemsSelector } from '../Redux/slices/cartSlice';
 
 
 
@@ -63,7 +64,8 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 export default function PrimarySearchAppBar() {
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
 
-  // const count = useSelector(state => state)
+  const count = useSelector((state)=>state)
+  console.log("count",count.cart.data);
   const navigate = useNavigate()
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
   const theme = createTheme({
@@ -165,7 +167,7 @@ export default function PrimarySearchAppBar() {
                 color="inherit"
                 onClick={handleClick}
               >
-                <Badge badgeContent={0} color="inherit">
+                <Badge badgeContent={count.cart.data} color="inherit">
                   <ShoppingCartOutlinedIcon size="large" />
                 </Badge>
               </IconButton>

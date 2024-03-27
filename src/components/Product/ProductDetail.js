@@ -9,14 +9,16 @@ import Rating from '@mui/material/Rating';
 import { FavoriteBorder } from '@mui/icons-material'
 import { useParams } from 'react-router-dom'
 import { addCart, getCartItems, updateQuantity, getProducts } from '../../services/ProductServices'
-// import { useDispatch } from 'react-redux'
+import { useDispatch } from 'react-redux'
+import { addItem, fetchCartLength } from '../Redux/slices/cartSlice'
+
 
 export default function ProductDetails() {
     const { id } = useParams();
     const [product, setProduct] = useState(null);
     const [showIncrementDecrement, setShowIncrementDecrement] = useState(false);
     const [quantity, setQuantity] = useState(1);
-    // const dispatch = useDispatch()
+    const dispatch = useDispatch()
 
     useEffect(() => {
         fetchProduct();
@@ -50,7 +52,8 @@ export default function ProductDetails() {
         const idParam = (id.product.product._id);
         await addCart(idParam, product)
         await getCartItem()
-        // dispatch({ type:'INC'})
+        // dispatch(addItem({name: product.product.bookName}))
+        dispatch(fetchCartLength())
     };
     const getCartItem = async () => {
         const cartList = await getCartItems();

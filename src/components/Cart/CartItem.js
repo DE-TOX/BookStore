@@ -3,14 +3,15 @@ import { Box, Typography } from '@mui/material'
 import StarIcon from '@mui/icons-material/Star';
 import BookImg from '../../images/Image 20.png'
 import { deleteCartItem, updateQuantity } from '../../services/ProductServices';
-// import { useDispatch } from 'react-redux';
+import { fetchCartLength } from '../Redux/slices/cartSlice';
+import { useDispatch } from 'react-redux';
 
 
 
 
 export default function CartItem({ product, onRemove }) {
     const [quantity, setQuantity] = useState(product.quantityToBuy)
-    // const dispatch = useDispatch()
+    const dispatch = useDispatch()
     const handleDec = async () => {
         setQuantity(prevQuantity => prevQuantity > 1 ? prevQuantity - 1 : prevQuantity);
         var prodCount =
@@ -33,6 +34,7 @@ export default function CartItem({ product, onRemove }) {
         await deleteCartItem(product._id)
         onRemove(product._id);
         // dispatch({ type:'DEC'})
+        dispatch(fetchCartLength())
     }
 
 
