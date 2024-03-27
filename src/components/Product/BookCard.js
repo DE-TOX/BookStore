@@ -11,8 +11,10 @@ import { useNavigate } from 'react-router-dom';
 export default function BookCard(props) {
     const [isHovered, setIsHovered] = React.useState(false);
     const navigate = useNavigate()
+    // console.log(props.product._id);
     const handleCardClick = (product) => {
-        navigate('/dashboard/details', { state: { product } });
+        const id = product.product._id;
+        navigate(`/dashboard/${id}`, { state: { product } });
     };
     return (
         <Card

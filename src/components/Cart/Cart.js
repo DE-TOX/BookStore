@@ -88,8 +88,6 @@ export default function Cart() {
     };
     const handleContinue = async (event) => {
         event.preventDefault();
-        const name = document.getElementById('name').value;
-        const phone = document.getElementById('phone').value;
         const addressInput = document.getElementById('address').value;
         const city = document.getElementById('city').value;
         const state = document.getElementById('state').value;
@@ -109,12 +107,9 @@ export default function Cart() {
     };
 
     const fetchProducts = async () => {
-        try {
             const fetchedProducts = await getCartItems()
             setCartItems(fetchedProducts.data.result);
-        } catch (error) {
-            console.error('Error fetching notes:', error);
-        }
+        
     };
 
     useEffect(() => {

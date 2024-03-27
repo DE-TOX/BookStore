@@ -4,6 +4,7 @@ import Dashboard from "../components/Dashboard/Dashboard";
 import ProductContainer from "../components/Product/ProductContainer";
 import ProductDetails from "../components/Product/ProductDetail";
 import Cart from "../components/Cart/Cart";
+import Success from "../pages/Success";
 
 export const Routers = () => {
     const AppRoutes = createBrowserRouter([
@@ -21,12 +22,17 @@ export const Routers = () => {
                     element: <ProductContainer />
                 },
                 {
-                    path: "details",
+                    // path: "details",
+                    path: ":id",
                     element: <ProductDetails />
                 },
                 {
                     path: "cart",
                     element: <Cart />
+                },
+                {
+                    path: "success",
+                    element: <Success />
                 }
             ],
         }

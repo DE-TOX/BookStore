@@ -1,16 +1,15 @@
 import * as React from 'react';
 import Breadcrumbs from '@mui/material/Breadcrumbs';
 import Link from '@mui/material/Link';
-// import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 
 
 export default function BasicBreadcrumb() {
-    // const navigate = useNavigate()
-    function handleClick(event) {
-        event.preventDefault();
-        console.info('You clicked a breadcrumb.');
-        // navigate("/dashboard/product")
+    const navigate = useNavigate()
+    const handleClick = () => {
+        console.log("cl")
+        navigate('/dashboard/product')
     }
     return (
         <div role="presentation" onClick={handleClick} style={{ position: "relative", right: "38%", marginTop: "17px" }} width="100%">

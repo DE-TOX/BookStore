@@ -9,8 +9,10 @@ import AccountCircle from '@mui/icons-material/AccountCircle';
 import ClassOutlinedIcon from '@mui/icons-material/ClassOutlined';
 import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined';
 import { Button } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 
 export default function AccountMenu() {
+    const navigate = useNavigate()
     const [anchorEl, setAnchorEl] = React.useState(null);
     const open = Boolean(anchorEl);
     const handleClick = (event) => {
@@ -19,6 +21,10 @@ export default function AccountMenu() {
     const handleClose = () => {
         setAnchorEl(null);
     };
+    const handleLogout = ()=>{
+        window.localStorage.removeItem('token')
+        navigate('/')
+    }
     return (
         <React.Fragment>
             <Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'center' }}>
@@ -85,7 +91,7 @@ export default function AccountMenu() {
                 </MenuItem>
                 <Divider />
                 <MenuItem onClick={handleClose}>
-                    <Button variant="outlined" >LOGOUT</Button>
+                    <Button variant="outlined" onClick={handleLogout}>LOGOUT</Button>
                 </MenuItem>
             </Menu>
         </React.Fragment>

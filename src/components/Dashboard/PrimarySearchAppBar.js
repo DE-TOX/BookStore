@@ -15,6 +15,10 @@ import AccountCircle from '@mui/icons-material/AccountCircle';
 import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
 import MoreIcon from '@mui/icons-material/MoreVert';
 import AccountMenu from './AccountMenu';
+import { useNavigate } from 'react-router-dom';
+import { Badge, Button } from '@mui/material';
+// import { useSelector } from 'react-redux';
+
 
 
 const Search = styled('div')(({ theme }) => ({
@@ -47,7 +51,6 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   color: 'inherit',
   '& .MuiInputBase-input': {
     padding: theme.spacing(1, 1, 1, 0),
-    // vertical padding + font size from searchIcon
     paddingLeft: `calc(1em + ${theme.spacing(4)})`,
     transition: theme.transitions.create('width'),
     width: '100%',
@@ -60,6 +63,8 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 export default function PrimarySearchAppBar() {
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
 
+  // const count = useSelector(state => state)
+  const navigate = useNavigate()
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
   const theme = createTheme({
     palette: {
@@ -79,6 +84,14 @@ export default function PrimarySearchAppBar() {
   const handleMobileMenuOpen = (event) => {
     setMobileMoreAnchorEl(event.currentTarget);
   };
+  const handleClick = () => {
+    console.log("cl")
+    navigate('/dashboard/cart')
+  }
+  const handleClick2 = () => {
+    console.log("cl")
+    navigate('/dashboard/product')
+  }
 
   const mobileMenuId = 'primary-search-account-menu-mobile';
   const renderMobileMenu = (
@@ -118,18 +131,21 @@ export default function PrimarySearchAppBar() {
 
   return (
     <ThemeProvider theme={theme}>
-      <Box sx={{ flexGrow: 1 }}>
-        <AppBar position="static">
+      <Box sx={{ flexGrow: 1, mb: 4 }}>
+        <AppBar position="static" sx={{ px: 6 }}>
           <Toolbar>
-            <MenuBookOutlinedIcon sx={{ mr: 1, ml: 14 }} />
-            <Typography
-              variant="h6"
-              noWrap
-              component="div"
-              sx={{ display: { xs: 'none', sm: 'block' } }}
-            >
-              BooKStore
-            </Typography>
+            <Button color='inherit'>
+              <MenuBookOutlinedIcon onClick={handleClick2} sx={{ mx: 1 }} />
+              <Typography
+                variant="h6"
+                noWrap
+                component="div"
+                sx={{ display: { xs: 'none', sm: 'block' } }}
+                onClick={handleClick2}
+              >
+                BooKStore
+              </Typography>
+            </Button>
             <Search >
               <SearchIconWrapper>
                 <SearchIcon />
@@ -147,8 +163,11 @@ export default function PrimarySearchAppBar() {
                 edge="end"
                 aria-label="account of current user"
                 color="inherit"
+                onClick={handleClick}
               >
-                <ShoppingCartOutlinedIcon size="large" />
+                <Badge badgeContent={0} color="inherit">
+                  <ShoppingCartOutlinedIcon size="large" />
+                </Badge>
               </IconButton>
             </Box>
             <Box sx={{ display: { xs: 'flex', md: 'none' } }}>

@@ -7,21 +7,20 @@ import { useNavigate } from 'react-router-dom';
 
 export default function BasicBreadcrumbs() {
     const navigate = useNavigate()
-    function handleClick(event) {
-        event.preventDefault();
-        console.info('You clicked a breadcrumb.');
-        // navigate("/dashboard/product")
+    const handleClick = () => {
+        console.log("cl")
+        navigate('/dashboard/product')
     }
     return (
-        <div role="presentation" onClick={handleClick} style={{ position: "relative", right: "38%", marginTop: "17px" }} width="100%">
+        <div role="presentation" style={{ position: "relative", right: "38%", marginTop: "17px" }} width="100%">
             <Breadcrumbs aria-label="breadcrumb">
-                <Link underline="hover" color="inherit" href="/dashboard/product">
+                <Link onClick={handleClick} underline="hover" color="inherit" href="/dashboard/product">
                     home
                 </Link>
                 <Link
-                    underline="hover"
+                    underline=""
                     color="inherit"
-                    href="/material-ui/getting-started/installation/"
+                    herf='/'
                 >
                     book
                 </Link>

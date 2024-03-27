@@ -7,39 +7,55 @@ import BookImg3 from '../../images/Image 18.png'
 import StarIcon from '@mui/icons-material/Star';
 import Rating from '@mui/material/Rating';
 import { FavoriteBorder } from '@mui/icons-material'
-import { useLocation } from 'react-router-dom'
-import { addCart, getCartItems, updateQuantity } from '../../services/ProductServices'
-
+import { useParams } from 'react-router-dom'
+import { addCart, getCartItems, updateQuantity, getProducts } from '../../services/ProductServices'
+// import { useDispatch } from 'react-redux'
 
 export default function ProductDetails() {
-    const location = useLocation();
-    const product = location.state && location.state.product ? location.state.product : null;
+    const { id } = useParams();
+    const [product, setProduct] = useState(null);
     const [showIncrementDecrement, setShowIncrementDecrement] = useState(false);
     const [quantity, setQuantity] = useState(1);
+    // const dispatch = useDispatch()
+
     useEffect(() => {
-        const fetchCartItem = async () => {
-            const cartItem = await getCartItem();
-            if (cartItem[0] && cartItem[0]._id) {
-                setShowIncrementDecrement(true);
-                setQuantity(cartItem[0].quantityToBuy);
-            }
-        };
+        fetchProduct();
+        return (() => {
+        })
+    }, []);
+    useEffect(() => {
+        fetchCartItem(product);
+        return (() => {
+        })
+    }, []);
+    const fetchProduct = async () => {
+        const products = await getProducts();
+        const data = products.data.result;
+        const product = data?.find(p => p._id === id);
+        const item = { product }
+        setProduct(item);
+    };
 
-        fetchCartItem();
-    });
-
+    console.log("product", product);
+    const fetchCartItem = async (product) => {
+        const cartItem = await getCartItem(product);
+        if (cartItem && cartItem[0] && cartItem[0]._id) {
+            setShowIncrementDecrement(true);
+            setQuantity(cartItem[0].quantityToBuy);
+        }
+    };
     const handleAddToBag = async () => {
         setShowIncrementDecrement(true);
         const id = { product }
         const idParam = (id.product.product._id);
         await addCart(idParam, product)
-        const cartItem = await getCartItem()
-        console.log(cartItem);
+        await getCartItem()
+        // dispatch({ type:'INC'})
     };
     const getCartItem = async () => {
         const cartList = await getCartItems();
-        const filteredItems = cartList.data.result.filter(item => item.product_id._id === product.product._id);
-        return filteredItems
+        const filteredItems = product && cartList.data.result?.filter(item => item.product_id._id === product.product._id);
+        return filteredItems && filteredItems.length > 0 ? filteredItems : null;
     }
     const handleIncrement = async () => {
         const cartItem = await getCartItem()
@@ -61,12 +77,9 @@ export default function ProductDetails() {
 
         await updateQuantity(cartItem[0]._id, prodCount)
     };
-
     if (!product) {
-        console.error('No product data found.');
-        return null; // Or redirect to another page
+        return <div>Loading product details...</div>;
     }
-
     return (
         <Box sx={{ flexGrow: 1, display: 'flex', flexDirection: "column", justifyContent: 'center', alignItems: 'center' }}>
             <BasicBreadcrumbs />
@@ -81,7 +94,7 @@ export default function ProductDetails() {
                             <>
                                 <Button variant='contained' sx={{ background: "none", color: "black", fontSize: "20px", borderRadius: "50%", width: "40px", height: "40px" }} onClick={handleDecrement}>-</Button>
                                 <Typography mt={1.5}>{quantity}</Typography>
-                                <Button variant='contained' sx={{ background: "none", color: "black", fontSize: "20px", borderRadius: "50%",width: "40px", height: "40px" }} onClick={handleIncrement}>+</Button>
+                                <Button variant='contained' sx={{ background: "none", color: "black", fontSize: "20px", borderRadius: "50%", width: "40px", height: "40px" }} onClick={handleIncrement}>+</Button>
                             </>
                         ) : (
                             <Button variant='contained' sx={{ backgroundColor: "#A03037" }} onClick={handleAddToBag}>ADD TO BAG</Button>

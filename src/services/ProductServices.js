@@ -5,7 +5,7 @@ const configForProducts = () => {
     const accessToken = localStorage.getItem("token")
     const header = {
         headers: {
-            "Content-Type": "application/json",
+            // 'Accept': "application/json",
             "x-access-token": accessToken
         }
     }
@@ -42,7 +42,7 @@ export const updateQuantity = async (productId, quantity) => {
 
 export const getCartItems = async () => {
     try {
-        const response = await axios.get(`${baseUrl}/get_cart_items`, configForProducts())
+        const response = await axios?.get(`${baseUrl}/get_cart_items`, configForProducts())
         return (response)
     } catch (error) {
         console.error(error);
